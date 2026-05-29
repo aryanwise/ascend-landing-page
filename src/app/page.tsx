@@ -38,19 +38,19 @@ export default function HomePage() {
             <span style={{ width: 38, height: 38, borderRadius: 10, background: '#D9531E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Fraunces, serif', fontSize: 16, fontWeight: 700, color: '#fff' }}>A</span>
             <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '0.5px', color: '#1A1815' }}>ASCEND</span>
           </a>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
-            <a href="#how" style={{ fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500 }}>How it works</a>
-            <a href="#features" style={{ fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500 }}>Features</a>
-            <a href="#demo" style={{ fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500 }}>Try demo</a>
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
+            <a href="#how" className="nav-link-hide" style={{ fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500 }}>How it works</a>
+            <a href="#features" className="nav-link-hide" style={{ fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500 }}>Features</a>
+            <a href="#demo" className="nav-link-hide" style={{ fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500 }}>Try demo</a>
             <a href="#waitlist" style={{ background: '#1A1815', color: '#fff', padding: '9px 16px', borderRadius: 10, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>Join waitlist</a>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <section style={{ paddingTop: 140, paddingBottom: 80 }}>
+      <section className="hero-section" style={{ paddingTop: 140, paddingBottom: 80 }}>
         <div className="container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap' }}>
+          <div className="hero-grid" style={{ display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap' }}>
             <div style={{ flex: '1 1 400px', minWidth: 0 }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#FFE9DD', borderRadius: 99, padding: '6px 14px', marginBottom: 24 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#D9531E', animation: 'pulse 2s infinite' }} />
@@ -68,7 +68,7 @@ export default function HomePage() {
               <p style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: '#6B6359', maxWidth: 580, lineHeight: 1.6, marginBottom: 36 }}>
                 The goal app that learns <em>why</em> you slip — then re-engineers your plan around your real life, real energy, real constraints.
               </p>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <div className="hero-ctas" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a href="#demo" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#D9531E', color: '#fff', padding: '16px 28px', borderRadius: 14, fontSize: 15, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(217,83,30,0.35)' }}>
                   Try the demo →
                 </a>
@@ -79,7 +79,7 @@ export default function HomePage() {
             </div>
 
             {/* Static phone preview (hero) */}
-            <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center' }}>
+            <div className="hero-phone-col" style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center' }}>
               <HeroPhonePreview />
             </div>
           </div>
@@ -87,10 +87,10 @@ export default function HomePage() {
       </section>
 
       {/* PROBLEM */}
-      <section style={{ background: '#1A1815', color: '#fff', padding: '100px 0' }}>
+      <section className="section-pad" style={{ background: '#1A1815', color: '#fff', padding: '100px 0' }}>
         <div className="container">
           <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: '#D9531E', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 20 }}>The shame cycle</div>
-          <div style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(22px, 4vw, 46px)', fontStyle: 'italic', fontWeight: 500, lineHeight: 1.25, maxWidth: 860, position: 'relative', paddingLeft: 56, borderLeft: '4px solid #D9531E', color: 'rgba(255,255,255,0.92)' }}>
+          <div className="problem-quote" style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(22px, 4vw, 46px)', fontStyle: 'italic', fontWeight: 500, lineHeight: 1.25, maxWidth: 860, position: 'relative', paddingLeft: 56, borderLeft: '4px solid #D9531E', color: 'rgba(255,255,255,0.92)' }}>
             <span style={{ position: 'absolute', left: 8, top: -10, fontSize: 'clamp(60px, 8vw, 110px)', fontFamily: 'Fraunces, serif', color: '#D9531E', lineHeight: 1 }}>"</span>
             Try harder. Just be consistent. Build the habit. As if I haven't tried. As if missing the gym twice means I'm broken. As if the plan can't be the thing that's wrong.
           </div>
@@ -99,13 +99,13 @@ export default function HomePage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" style={{ padding: '100px 0' }}>
+      <section id="how" className="section-pad" style={{ padding: '100px 0' }}>
         <div className="container">
           <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: '#D9531E', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 16 }}>How it works</div>
           <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 700, letterSpacing: '-1.5px', lineHeight: 1.05, marginBottom: 16, maxWidth: 700 }}>The plan flexes around you.</h2>
           <p style={{ fontSize: 17, color: '#6B6359', maxWidth: 560, marginBottom: 50, lineHeight: 1.6 }}>Five behaviors make Ascend different from anything else you've tried.</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          <div className="how-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
             <HowCard featured num="01" title="The Two-Strike Rule" desc="Miss the same task twice? AI stops the schedule, asks why, proposes a real change — modify, pause, or remove. No guilt. Just recalibration." example="→ Day 2 miss: 'Mornings aren't working. Move to evenings or pause for the week?'" />
             <HowCard num="02" title="Honest Reasons" desc={`Tap "Couldn't?" and pick what actually got in the way. AI builds memory of your real blockers, not just missed checkboxes.`} />
             <HowCard num="03" title="AI Goal Planning" desc="5 sharp questions about your real constraints — health, time, past failures. Builds a plan that fits your life, not a generic template." />
@@ -116,7 +116,7 @@ export default function HomePage() {
       </section>
 
       {/* FEATURES CAROUSEL */}
-      <section id="features" style={{ background: '#EBE5D6', padding: '100px 0', overflow: 'hidden' }}>
+      <section id="features" className="section-pad" style={{ background: '#EBE5D6', padding: '100px 0', overflow: 'hidden' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative' }}>
           
           {/* Header Block */}
@@ -296,9 +296,9 @@ export default function HomePage() {
       </section>
 
       {/* INTERACTIVE DEMO */}
-      <section id="demo" style={{ background: '#EBE5D6', padding: '100px 0' }}>
+      <section id="demo" className="section-pad" style={{ background: '#EBE5D6', padding: '100px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 60, alignItems: 'center' }}>
+          <div className="demo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 60, alignItems: 'center' }}>
             <div>
               <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: '#D9531E', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 16 }}>Try it now</div>
               <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 700, letterSpacing: '-1.5px', lineHeight: 1.05, marginBottom: 18 }}>The full story, in your hand.</h2>
@@ -317,7 +317,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="demo-phone-col" style={{ display: 'flex', justifyContent: 'center' }}>
               <DemoContainer embedded />
             </div>
           </div>
@@ -325,7 +325,7 @@ export default function HomePage() {
       </section>
 
       {/* WAITLIST */}
-      <section id="waitlist" style={{ background: '#1A1815', color: '#fff', padding: '120px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section id="waitlist" className="waitlist-section" style={{ background: '#1A1815', color: '#fff', padding: '120px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 20%, rgba(217,83,30,0.15) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(217,83,30,0.1) 0%, transparent 40%)' }} />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: '#D9531E', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 20 }}>Limited beta</div>
@@ -342,7 +342,7 @@ export default function HomePage() {
       {/* FOOTER */}
       <footer style={{ padding: '60px 0 40px', borderTop: '1px solid rgba(26,24,21,0.08)' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+          <div className="footer-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
             <span style={{ fontSize: 13, color: '#6B6359', fontWeight: 500 }}>© 2026 Ascend · Built with care, not shame.</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
               <a href="mailto:aryanmishraa12@gmail.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontWeight: 500, color: '#6B6359', textDecoration: 'none' }}>Contact</a>
@@ -359,7 +359,7 @@ export default function HomePage() {
 /* ─── INLINE COMPONENTS ─────────────────────────────── */
 function HowCard({ num, title, desc, example, featured }: { num: string; title: string; desc: string; example?: string; featured?: boolean }) {
   return (
-    <div style={{ borderRadius: 24, padding: '28px 32px', border: featured ? 'none' : '1px solid rgba(26,24,21,0.08)', background: featured ? 'linear-gradient(135deg, #FFE9DD, #FFD5BC)' : '#fff', gridColumn: featured ? 'span 2' : undefined }}>
+    <div className={featured ? 'how-card-featured' : ''} style={{ borderRadius: 24, padding: '28px 32px', border: featured ? 'none' : '1px solid rgba(26,24,21,0.08)', background: featured ? 'linear-gradient(135deg, #FFE9DD, #FFD5BC)' : '#fff', gridColumn: featured ? 'span 2' : undefined }}>
       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: featured ? '#B33E0E' : '#A8A095', letterSpacing: '1.5px', marginBottom: 12 }}>PRINCIPLE {num}</div>
       <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: featured ? 30 : 24, fontWeight: 700, letterSpacing: '-0.5px', marginBottom: 10, color: featured ? '#B33E0E' : '#1A1815', lineHeight: 1.15 }}>{title}</h3>
       <p style={{ fontSize: 15, color: featured ? '#B33E0E' : '#6B6359', lineHeight: 1.6, marginBottom: example ? 14 : 0, opacity: featured ? 0.9 : 1 }}>{desc}</p>
