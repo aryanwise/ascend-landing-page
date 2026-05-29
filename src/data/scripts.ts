@@ -1,4 +1,4 @@
-import type { Goal, AreaId } from '@/types';
+import type { Goal, AreaId, DayPlan } from '@/types';
 
 // 3-question dialogue per area (shorter = snappier demo)
 export const DIALOGUE_QUESTIONS: Record<AreaId, string[]> = {
@@ -82,22 +82,32 @@ Rules:
 
 // Groq system prompt for coach chat
 export const COACH_SYSTEM = (goals: Goal[]) => {
-  const goalList = goals.map(g =>
-    `- [${g.area}] ${g.title}: tasks include ${g.plan.dailyTasks.slice(0, 3).map(t => t.name).join(', ')}`
-  ).join('\n');
+  const goalList = goals
+    .filter(g => !g.paused)
+    .map(g =>
+      `[${g.area.toUpperCase()}] "${g.title}"\n  Tasks: ${g.plan.dailyTasks.map(t => `${t.name} (${t.duration ?? 'ongoing'})`).join(', ')}`
+    ).join('\n');
 
-  return `You are Ascend, an AI cognitive partner. You know the user's real goals and their history.
+  return `You are Ascend — a cognitive partner, not a chatbot.
+
+You have access to the user's real goals and tasks. You speak to them directly, like a trusted advisor who has read their data and has opinions about it.
 
 THEIR ACTIVE GOALS:
-${goalList || '(no goals yet)'}
+${goalList || '(none yet — encourage them to create one)'}
 
-Rules:
-- Be direct, honest, and specific — never generic
-- Reference their actual goals and tasks by name
-- 3-4 sentences max
-- No bullet points, no numbered lists, flowing prose only
-- If they're struggling, propose ONE concrete change
-- Never moralize or lecture`;
+Your personality:
+- Direct and specific. Never vague or generic.
+- Reference their actual goal and task names when relevant.
+- Honest about patterns, problems, and inconsistencies you can infer.
+- No empty encouragement. No "Great work!" or "You've got this!"
+- No moralizing. No lecturing.
+- Short sentences. Punchy. Real.
+- If they're stuck → give ONE concrete next action, not a list.
+- If they're struggling → name it clearly with empathy, then pivot to the fix immediately.
+- If they ask about a goal → be specific about what you know, not generic.
+- Max 3-4 sentences per response. Leave them with something actionable.
+
+You are not a therapist. You are a sharp, honest, data-aware productivity partner.`;
 };
 
 // Pre-seeded study goal (shown with ⚠️ warning — 2 missed days)
@@ -167,4 +177,84 @@ export const PLAN_TEMPLATE_BY_AREA: Record<AreaId, { title: string; summary: str
   health: { title: 'Foundational Health Repair', summary: 'Sleep, sunlight, movement — the leverage points that affect everything.', duration: '10 weeks', tasks: [{ id: 't-h-1', name: 'Bed by 10:30pm', frequency: 'daily', duration: 'discipline' }, { id: 't-h-2', name: 'Morning sunlight', frequency: 'daily', duration: '10 min' }] },
   habits: { title: 'One Habit, Fully Installed', summary: 'Tiny inputs, daily check-in, a single anchor you can\'t skip.', duration: '8 weeks', tasks: [{ id: 't-ha-1', name: 'Do the habit (min dose)', frequency: 'daily', duration: '5 min' }, { id: 't-ha-2', name: 'Log it', frequency: 'daily', duration: '10 sec' }] },
   custom: { title: 'Your Custom Plan', summary: 'A flexible structure built around the specific goal you described.', duration: '10 weeks', tasks: [{ id: 't-cu-1', name: 'Daily focused work', frequency: 'daily', duration: '30 min' }, { id: 't-cu-2', name: 'Weekly review', frequency: 'weekly:Sun', duration: '15 min' }] },
+};
+
+export const PAUSED_GOALS: Goal[] = [
+  {
+    id: 'demo-paused-1',
+    area: 'habits',
+    title: 'Daily Journaling Practice',
+    paused: true,
+    missedDays: 0,
+    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+    plan: {
+      title: 'Daily Journaling Practice',
+      summary: 'A 10-minute evening reflection habit.',
+      duration: '8 weeks',
+      milestones: [],
+      dailyTasks: [
+        { id: 'j-1', name: 'Evening journal entry', frequency: 'daily', duration: '10 min', category: 'habit' },
+        { id: 'j-2', name: 'Weekly intentions review', frequency: 'weekly:Sun', duration: '15 min', category: 'habit' },
+      ],
+      tips: [],
+    },
+  },
+  {
+    id: 'demo-paused-2',
+    area: 'money',
+    title: '6-Month Emergency Fund',
+    paused: true,
+    missedDays: 0,
+    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+    plan: {
+      title: '6-Month Emergency Fund',
+      summary: 'Build financial safety net through consistent saving.',
+      duration: '12 weeks',
+      milestones: [],
+      dailyTasks: [
+        { id: 'ef-1', name: 'Daily account check (2 min)', frequency: 'daily', duration: '2 min', category: 'habit' },
+        { id: 'ef-2', name: 'Weekly money review', frequency: 'weekly:Sun', duration: '20 min', category: 'other' },
+        { id: 'ef-3', name: 'Move money to savings', frequency: 'weekly:Fri', duration: '5 min', category: 'habit' },
+      ],
+      tips: [],
+    },
+  },
+];
+
+export const MODIFY_SYSTEM = (goals: Goal[], plan: DayPlan | null) => {
+  const goalList = goals
+    .filter(g => !g.paused)
+    .map(g =>
+      `[${g.area}] "${g.title}" — tasks: ${g.plan.dailyTasks.map(t => `${t.name} (${t.duration ?? 'no duration'})`).join(', ')}`
+    ).join('\n');
+
+  const planBlocks = plan?.blocks
+    .map((b, i) => `  [${i}] ${b.time} — ${b.task} (${b.duration}, ${b.area})`)
+    .join('\n') ?? '  (no plan yet — pick the closest relevant task from goals)';
+
+  return `You are Ascend making a live change to the user's day plan.
+
+THEIR GOALS:
+${goalList}
+
+CURRENT DAY PLAN:
+${planBlocks}
+
+The user wants to modify their plan. Your job:
+1. Confirm the change in 1-2 sentences. Sound decisive — you've already made the call.
+2. Be specific about what changed and why it still works.
+3. On a new line at the very end output exactly this:
+PLAN_CHANGE: [block index number] → [new task name] ([new duration])
+
+Rules:
+- Talk TO the user, never ABOUT them
+- No hedging ("I think maybe...", "You could try...")
+- Sound like a coach adjusting the game plan at halftime
+- Pick the block index that best matches the request
+- If no plan exists yet, use index 0
+
+Good: "Cut. 20 minutes still hits the compound movements — you'll recover better.
+PLAN_CHANGE: 0 → Training session (20 min)"
+
+Bad: "The user has requested to modify their current day plan by making their workout shorter."`;
 };

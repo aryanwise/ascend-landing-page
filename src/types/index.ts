@@ -78,7 +78,7 @@ export type DemoStep =
   | 'app'     // main tabbed app experience
   | 'done';
 
-export type AppTab = 'home' | 'goals' | 'dayplan' | 'coach';
+export type AppTab = 'home' | 'goals' | 'assistant' | 'coach' | 'insights';
 
 export interface DialogueMessage {
   role: 'user' | 'assistant';

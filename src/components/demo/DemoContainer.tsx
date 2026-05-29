@@ -5,10 +5,12 @@ import PhoneFrame from '@/components/shared/PhoneFrame';
 import { IntroScreen, PickAreaScreen, GoalTextScreen, AIDialogueScreen, PlanReviewScreen } from './SetupScreens';
 import HomeScreen from './HomeScreen';
 import GoalsScreen from './GoalsScreen';
-import TodaysTasksScreen from './TodaysTasksScreen';
+import AssistantDemo from './AssistantDemo';
 import CoachScreen from './CoachScreen';
 import RecalibrateModal from './RecalibrateModal';
 import type { AppTab } from '@/types';
+import InsightsScreen from './InsightsScreen';
+import { BarChart3 } from 'lucide-react';
 
 interface DemoContainerProps {
   embedded?: boolean;
@@ -17,8 +19,9 @@ interface DemoContainerProps {
 const TABS: { id: AppTab; label: string; icon: typeof Home }[] = [
   { id: 'home',    label: 'Home',    icon: Home },
   { id: 'goals',   label: 'Goals',   icon: Target },
-  { id: 'dayplan', label: 'Tasks',   icon: CheckSquare },
-  { id: 'coach',   label: 'Coach',   icon: MessageCircle },
+  { id: 'assistant', label: 'Assistant',   icon: CheckSquare },
+  { id: 'coach', label: 'Coach', icon: MessageCircle },
+  { id: 'insights', label: 'Insights', icon: BarChart3 },
 ];
 
 export default function DemoContainer({ embedded = false }: DemoContainerProps) {
@@ -85,19 +88,8 @@ export default function DemoContainer({ embedded = false }: DemoContainerProps) 
             onOpenRecalibrate={d.openRecalibrate}
           />
         )}
-        {state.activeTab === 'dayplan' && (
-          <TodaysTasksScreen
-            goals={state.goals}
-            completions={state.completions}
-            energy={state.energy}
-            dayPlan={state.dayPlan}
-            dayPlanLoading={state.dayPlanLoading}
-            onToggleTask={d.toggleTask}
-            onSetEnergy={d.setEnergy}
-            onSetPlan={d.setDayPlan}
-            onSetLoading={d.setDayPlanLoading}
-            onToggleBlock={d.toggleDayBlock}
-          />
+        {state.activeTab === 'assistant' && (
+          <AssistantDemo />
         )}
         {state.activeTab === 'coach' && (
           <CoachScreen
@@ -117,6 +109,12 @@ export default function DemoContainer({ embedded = false }: DemoContainerProps) 
             onAddChat={d.addRecalibrateChat}
             onApply={d.applyRecalibration}
             onClose={d.closeRecalibrate}
+          />
+        )}
+        {state.activeTab === 'insights' && (
+          <InsightsScreen
+            goals={state.goals}
+            completions={state.completions}
           />
         )}
       </div>

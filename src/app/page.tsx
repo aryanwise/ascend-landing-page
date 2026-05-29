@@ -1,8 +1,34 @@
+'use client';
+
+import { useRef } from 'react';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import DemoContainer from '@/components/demo/DemoContainer';
 import WaitlistForm from '@/components/landing/WaitlistForm';
 
 export default function HomePage() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 340; // Card width + gap
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const features = [
+    { icon: '🎯', title: 'Multi-Area Goals', desc: '9 critical life dimensions, capped at one radical focus per area. Fitness, deep research, engineering stacks, and finance — managed in total lockstep.' },
+    { icon: '📋', title: 'Daily Priorities', desc: 'Pin 1–3 non-negotiable execution steps every morning. Explicitly decoupled from long-term loops so you maintain clear, daily clarity.' },
+    { icon: '💬', title: 'Adaptive Coach Chat', desc: 'An AI partner trained on your specific behavioral bottlenecks. Zero generic platitudes — just raw, context-aware analysis and strategizing.' },
+    { icon: '🤖', title: 'Personal AI Assistant', desc: 'Outsource heavy lifting directly from the interface. Instantly structure chaotic notes, run competitive research, and compile local summaries in the background.' },
+    { icon: '📊', title: 'Insights Dashboard', desc: 'Quantify your momentum. Trace system health indices, diagnose recurring operational friction points, and isolate your peak performance windows.' },
+    { icon: '⏸️', title: 'Guilt-Free Pause', desc: 'Real life does not run linearly. Gracefully pause specific operational vectors for a week without degrading your historical metrics or breaking streaks.' },
+    { icon: '🔁', title: 'Dynamic System Voice', desc: 'Calibrate the feedback style to your current state. Toggle seamlessly between uncompromising accountability, analytical strategy, or balanced tracking.' },
+  ];
+
   return (
     <>
       {/* NAV */}
@@ -89,28 +115,184 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section id="features" style={{ background: '#EBE5D6', padding: '100px 0' }}>
-        <div className="container">
-          <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: '#D9531E', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 16 }}>What's inside</div>
-          <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(30px, 4vw, 52px)', fontWeight: 700, letterSpacing: '-1.5px', lineHeight: 1.05, marginBottom: 40, maxWidth: 600 }}>Built for ambitious planners who live messily.</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
-            {[
-              { icon: '🎯', title: 'Multi-Area Goals', desc: '9 life areas, one goal per area. Fitness, study, career, mind, money — all in one place.' },
-              { icon: '📋', title: 'Daily Priorities', desc: 'Pin 1–3 must-dos. Separate from goal tasks. The rest is bonus.' },
-              { icon: '💬', title: 'Coach Chat', desc: 'Real AI that knows your goals and slip patterns. No generic motivation — honest, specific advice.' },
-              { icon: '📊', title: 'Insights Dashboard', desc: 'Goal health scores, recurring blockers, and your strongest days of the week.' },
-              { icon: '⏸️', title: 'Guilt-Free Pause', desc: 'Life happens. Pause a goal for a week without losing progress. Resume when ready.' },
-              { icon: '🔁', title: 'Adaptive Voice', desc: 'Drill Sergeant, Strategist, or Balanced — the AI tone adapts everywhere.' },
-            ].map(f => (
-              <div key={f.title} style={{ background: '#fff', borderRadius: 18, padding: '24px', border: '1px solid rgba(26,24,21,0.08)' }}>
-                <div style={{ fontSize: 28, marginBottom: 12 }}>{f.icon}</div>
-                <div style={{ fontFamily: 'Fraunces, serif', fontSize: 20, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.3px' }}>{f.title}</div>
-                <div style={{ fontSize: 13, color: '#6B6359', lineHeight: 1.6 }}>{f.desc}</div>
+      {/* FEATURES CAROUSEL */}
+      <section id="features" style={{ background: '#EBE5D6', padding: '100px 0', overflow: 'hidden' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative' }}>
+          
+          {/* Header Block */}
+          <div style={{ marginBottom: 48, paddingLeft: 32, borderLeft: '3px solid #D9531E' }}>
+            <div style={{ 
+              fontSize: 11, 
+              fontFamily: 'JetBrains Mono, monospace', 
+              fontWeight: 700, 
+              color: '#D9531E', 
+              letterSpacing: '2px', 
+              textTransform: 'uppercase', 
+              marginBottom: 12 
+            }}>
+              What's inside
+            </div>
+            <h2 style={{ 
+              fontFamily: 'Fraunces, serif', 
+              fontSize: 'clamp(32px, 4.5vw, 54px)', 
+              fontWeight: 700, 
+              letterSpacing: '-1.5px', 
+              lineHeight: 1.2, 
+              maxWidth: '720px', // Constrains the width perfectly to balance line 2
+              color: '#1A1815',
+              margin: 0
+            }}>
+              Built for everyone.<br />
+              A supportive system for when the next step feels heavy.
+            </h2>
+          </div>
+
+          {/* Carousel Track wrapper */}
+          <div 
+            className="carousel-track"
+            ref={scrollContainerRef}
+            style={{ 
+              display: 'flex', 
+              gap: 20, 
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              paddingTop: '24px',      // Expands the shorthand into individual explicit keys
+              paddingBottom: '24px',
+              paddingLeft: '0px',
+              paddingRight: '24px',    // Clean combination with no runtime styling bugs
+              marginRight: '-24px'
+            }}
+          >
+            {features.map(f => (
+              <div 
+                key={f.title} 
+                className="carousel-card"
+                style={{ 
+                  background: '#fff', 
+                  borderRadius: 20, 
+                  padding: '32px 28px', 
+                  border: '1px solid rgba(26,24,21,0.05)',
+                  boxShadow: '0 10px 30px -10px rgba(26,24,21,0.04), 0 1px 1px rgba(26,24,21,0.01)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  width: '340px',
+                  flexShrink: 0,
+                  scrollSnapAlign: 'center', /* Snap to middle for an intentional, premium look */
+                  transition: 'transform 0.4s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.4s ease, opacity 0.4s ease',
+                }}
+              >
+                <div style={{ 
+                  fontSize: 32, 
+                  marginBottom: 20,
+                  width: '56px',
+                  height: '56px',
+                  background: '#FAF8F5',
+                  borderRadius: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(26,24,21,0.03)'
+                }}>
+                  {f.icon}
+                </div>
+                <h3 style={{ 
+                  fontFamily: 'Fraunces, serif', 
+                  fontSize: 21, 
+                  fontWeight: 700, 
+                  marginBottom: 12, 
+                  letterSpacing: '-0.3px',
+                  color: '#1A1815'
+                }}>
+                  {f.title}
+                </h3>
+                <p style={{ 
+                  fontSize: 13.5, 
+                  color: '#6B6359', 
+                  lineHeight: 1.65,
+                  margin: 0
+                }}>
+                  {f.desc}
+                </p>
               </div>
             ))}
           </div>
+
+          {/* Carousel Navigation Buttons Below Track */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 32 }}>
+            <button 
+              onClick={() => scroll('left')}
+              className="nav-btn"
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: '50%',
+                border: '1px solid rgba(26,24,21,0.12)',
+                background: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#1A1815',
+                boxShadow: '0 4px 12px rgba(26,24,21,0.03)',
+                transition: 'all 0.25s cubic-bezier(0.2, 1, 0.3, 1)'
+              }}
+            >
+              <ChevronLeft size={20} strokeWidth={2.5} />
+            </button>
+            <button 
+              onClick={() => scroll('right')}
+              className="nav-btn"
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: '50%',
+                border: '1px solid rgba(26,24,21,0.12)',
+                background: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#1A1815',
+                boxShadow: '0 4px 12px rgba(26,24,21,0.03)',
+                transition: 'all 0.25s cubic-bezier(0.2, 1, 0.3, 1)'
+              }}
+            >
+              <ChevronRight size={20} strokeWidth={2.5} />
+            </button>
+          </div>
+
         </div>
+
+        {/* CSS for Premium Hover States and Core Scrolling Engine */}
+        <style jsx global>{`
+          .carousel-track::-webkit-scrollbar {
+            display: none;
+          }
+          .carousel-track {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          
+          /* Card Hover States */
+          .carousel-card:hover {
+            transform: translateY(-4px) scale(1.01) !important;
+            border-color: rgba(219, 83, 30, 0.2) !important;
+            box-shadow: 0 20px 40px -15px rgba(217,83,30,0.08), 0 1px 2px rgba(217,83,30,0.02) !important;
+          }
+
+          /* Arrow Navigation Button Hover States */
+          .nav-btn:hover {
+            background: #1A1815 !important;
+            color: #fff !important;
+            border-color: #1A1815 !important;
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(26,24,21,0.15) !important;
+          }
+          .nav-btn:active {
+            transform: scale(0.95);
+          }
+        `}</style>
       </section>
 
       {/* INTERACTIVE DEMO */}
@@ -160,43 +342,13 @@ export default function HomePage() {
       {/* FOOTER */}
       <footer style={{ padding: '60px 0 40px', borderTop: '1px solid rgba(26,24,21,0.08)' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 32, marginBottom: 48 }}>
-            {/* Brand */}
-            <div style={{ flex: '1 1 200px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <span style={{ width: 34, height: 34, borderRadius: 9, background: '#D9531E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Fraunces, serif', fontSize: 14, fontWeight: 700, color: '#fff' }}>A</span>
-                <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.5px', color: '#1A1815' }}>ASCEND</span>
-              </div>
-              <p style={{ fontSize: 12, color: '#6B6359', lineHeight: 1.6, maxWidth: 220 }}>A cognitive partner, not another tracker. Built for people who plan ambitiously and live messily.</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+            <span style={{ fontSize: 13, color: '#6B6359', fontWeight: 500 }}>© 2026 Ascend · Built with care, not shame.</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
+              <a href="mailto:aryanmishraa12@gmail.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontWeight: 500, color: '#6B6359', textDecoration: 'none' }}>Contact</a>
+              <a href="#how" style={{ fontSize: 13, fontWeight: 500, color: '#6B6359', textDecoration: 'none' }}>How it works</a>
+              <a href="#demo" style={{ fontSize: 13, fontWeight: 500, color: '#6B6359', textDecoration: 'none' }}>Try demo</a>
             </div>
-
-            {/* Links */}
-            <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#A8A095', marginBottom: 14 }}>Product</div>
-                {[['How it works', '#how'], ['Features', '#features'], ['Try demo', '#demo'], ['Join waitlist', '#waitlist']].map(([label, href]) => (
-                  <a key={label} href={href} style={{ display: 'block', fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500, marginBottom: 10 }}>{label}</a>
-                ))}
-              </div>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#A8A095', marginBottom: 14 }}>Open source</div>
-                {[['GitHub', 'https://github.com/aryanwise/ascend'], ['Mobile app', 'https://github.com/aryanwise/ascend'], ['Backend API', 'https://github.com/aryanwise/ascend'], ['Report a bug', 'https://github.com/aryanwise/ascend/issues']].map(([label, href]) => (
-                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{ display: 'block', fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500, marginBottom: 10 }}>{label}</a>
-                ))}
-              </div>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#A8A095', marginBottom: 14 }}>Stack</div>
-                {[['React Native + Expo', '#'], ['Python FastAPI', '#'], ['Supabase', '#'], ['Groq · Llama 3.3 70B', '#']].map(([label, href]) => (
-                  <a key={label} href={href} style={{ display: 'block', fontSize: 13, color: '#6B6359', textDecoration: 'none', fontWeight: 500, marginBottom: 10 }}>{label}</a>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div style={{ borderTop: '1px solid rgba(26,24,21,0.08)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-            <span style={{ fontSize: 12, color: '#A8A095' }}>© 2025 Ascend · Built with care, not shame.</span>
-            <span style={{ fontSize: 12, color: '#A8A095' }}>MIT License · Free forever for personal use</span>
           </div>
         </div>
       </footer>
@@ -250,6 +402,3 @@ function HeroPhonePreview() {
     </div>
   );
 }
-
-
-

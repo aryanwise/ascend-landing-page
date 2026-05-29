@@ -1,7 +1,7 @@
 'use client';
 import { useReducer, useCallback } from 'react';
 import type { Goal, Priority, ChatMessage, DemoStep, AppTab, DialogueMessage, DayPlan, AreaId } from '@/types';
-import { SEEDED_STUDY_GOAL } from '@/data/scripts';
+import { SEEDED_STUDY_GOAL, PAUSED_GOALS } from '@/data/scripts';
 
 interface DemoState {
   step: DemoStep;
@@ -83,11 +83,10 @@ function reducer(s: DemoState, a: Action): DemoState {
     case 'ADVANCE_DIALOGUE': return { ...s, dialogueIndex: s.dialogueIndex + 1, currentAnswer: '' };
     case 'SET_CURRENT_ANSWER': return { ...s, currentAnswer: a.value };
     case 'ADD_GOAL':
-      // When first goal is added, also seed the fitness goal with 2 misses (for demo)
       return {
         ...s,
         goals: s.goals.length === 0
-          ? [a.goal, SEEDED_STUDY_GOAL]
+          ? [a.goal, SEEDED_STUDY_GOAL, ...PAUSED_GOALS]
           : [...s.goals.filter(g => g.id !== a.goal.id), a.goal],
       };
     case 'ADD_PRIORITY': {
