@@ -16,11 +16,9 @@ export default function PhoneFrame({ children, tilt = false }: PhoneFrameProps) 
         padding: 10,
         background: '#1A1815',
         boxShadow: '0 32px 80px -16px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.5)',
-        transform: tilt ? 'perspective(1200px) rotateY(-6deg) rotateX(2deg)' : 'none',
+        transform: 'none',
         transition: 'transform 0.4s ease',
       }}
-      onMouseEnter={e => { if (tilt) (e.currentTarget as HTMLDivElement).style.transform = 'perspective(1200px) rotateY(-3deg) rotateX(1deg)'; }}
-      onMouseLeave={e => { if (tilt) (e.currentTarget as HTMLDivElement).style.transform = 'perspective(1200px) rotateY(-6deg) rotateX(2deg)'; }}
     >
       {/* Screen */}
       <div
