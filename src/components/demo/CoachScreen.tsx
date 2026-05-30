@@ -157,6 +157,16 @@ const selectCommand = () => {
                 {s}
               </button>
             ))}
+            {/* @ commands preview */}
+            <div style={{ marginTop: 12, marginBottom: 4 }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#A8A095', marginBottom: 8 }}>
+                Available now
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', background: '#fff', borderRadius: 11, border: '1px solid rgba(26,24,21,0.08)' }}>
+                <code style={{ background: '#FFE9DD', color: '#D9531E', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 5, flexShrink: 0 }}>@modify</code>
+                <span style={{ fontSize: 12, color: '#6B6359' }}>Change anything in your day plan</span>
+              </div>
+            </div>
             {/* Coming soon features */}
             <div style={{ marginTop: 16, padding: '14px', background: '#F8F5EF', borderRadius: 14, border: '1px solid rgba(26,24,21,0.06)' }}>
               <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#A8A095', marginBottom: 10 }}>
