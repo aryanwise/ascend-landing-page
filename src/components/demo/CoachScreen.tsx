@@ -22,10 +22,9 @@ const getSuggestions = (goals: Goal[]) => {
     ];
   }
   return [
-    { text: "What pattern do you see in my goals?",     tag: null },
-    { text: "I'm exhausted. What should I skip today?", tag: null },
-    { text: "@modify make my workout shorter",          tag: '@modify' },
-    { text: "Am I taking on too much right now?",       tag: null },
+    "What pattern do you see in my goals?",
+    "I'm exhausted. What should I skip today?",
+    "Am I taking on too much right now?",
   ];
 };
 
@@ -42,6 +41,14 @@ export default function CoachScreen({ goals, chat, dayPlan, onAddChat, onUpdateP
   const assistantCount = chat.filter(m => m.role === 'assistant').length;
   const isLocked       = assistantCount >= 2;
   const showModifyNudge = assistantCount === 1;
+
+  // Dynamic @modify text from user's actual goal
+  const firstActiveGoal = goals.filter(g => !g.paused)[0];
+  const firstTaskName   = firstActiveGoal?.plan?.dailyTasks?.[0]?.name ?? 'workout';
+  const goalTitle       = firstActiveGoal?.title ?? '';
+  const modifyPrompt    = goalTitle
+    ? `@modify make my ${firstTaskName.toLowerCase()} for ${goalTitle} shorter`
+    : `@modify make my ${firstTaskName.toLowerCase()} shorter`;
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -147,23 +154,34 @@ const selectCommand = () => {
             <div style={{ fontSize: 12, color: '#A8A095', marginBottom: 12, lineHeight: 1.5 }}>
               Direct. Honest. Knows your goals.
             </div>
-            {(suggestions as (string | { text: string; tag: string | null })[]).map((s, i) => {
-              const isObj = typeof s === 'object';
-              const text  = isObj ? s.text : s;
-              const tag   = isObj ? s.tag  : null;
-              return (
-                <button key={i} onClick={() => send(text)} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left', padding: '11px 12px', background: '#fff', border: '1px solid rgba(26,24,21,0.08)', borderRadius: 12, fontSize: 12, color: '#1A1815', cursor: 'pointer', marginBottom: 6 }}>
-                  {tag === '@modify' && (
-                    <span style={{ background: '#FFE9DD', color: '#D9531E', fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 4, flexShrink: 0 }}>
-                      @modify
-                    </span>
-                  )}
-                  <span style={{ color: tag === '@modify' ? '#D9531E' : '#1A1815', fontWeight: tag === '@modify' ? 700 : 500 }}>
-                    {tag ? text.replace('@modify ', '') : text}
-                  </span>
-                </button>
-              );
-            })}
+            {(suggestions as string[]).map((s, i) => (
+              <button key={i} onClick={() => send(s)} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 14px', background: '#fff', border: '1px solid rgba(26,24,21,0.08)', borderRadius: 12, fontSize: 13, color: '#1A1815', cursor: 'pointer', marginBottom: 8, fontWeight: 500 }}>
+                {s}
+              </button>
+            ))}
+            {/* Coming soon features */}
+            <div style={{ marginTop: 16, padding: '14px', background: '#F8F5EF', borderRadius: 14, border: '1px solid rgba(26,24,21,0.06)' }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#A8A095', marginBottom: 10 }}>
+                Coming to the app
+              </div>
+              {[
+                { cmd: '@build',    desc: 'Build a new goal by talking to the coach' },
+                { cmd: '@reflect',  desc: 'Log what\'s been getting in your way' },
+                { cmd: '@reschedule', desc: 'Rearrange your whole week in one message' },
+                { cmd: '@check',    desc: 'Ask why a goal is slipping and get a fix' },
+                { cmd: '@focus',    desc: 'Tell the AI what matters today, it clears the rest' },
+              ].map((f, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: i < 4 ? 10 : 0, opacity: 0.6 }}>
+                  <code style={{ background: '#EBE5D6', color: '#6B6359', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 5, flexShrink: 0, marginTop: 1 }}>
+                    {f.cmd}
+                  </code>
+                  <span style={{ fontSize: 11, color: '#6B6359', lineHeight: 1.5 }}>{f.desc}</span>
+                </div>
+              ))}
+              <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(26,24,21,0.06)', fontSize: 10, color: '#A8A095', textAlign: 'center' }}>
+                + more in the full app → <a href="/#waitlist" style={{ color: '#D9531E', fontWeight: 700, textDecoration: 'none' }}>join the waitlist</a>
+              </div>
+            </div>
           </div>
         )}
 
@@ -220,13 +238,27 @@ const selectCommand = () => {
         /* Open: normal input */
         <div style={{ padding: '10px 14px 14px', borderTop: '1px solid rgba(26,24,21,0.06)', position: 'relative', flexShrink: 0 }}>
 
-          {/* @modify nudge after first answer */}
-          {showModifyNudge && (
-            <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6, background: '#FFE9DD', borderRadius: 9, padding: '7px 10px' }}>
-              <span style={{ fontSize: 11, color: '#B33E0E' }}>💡 Try</span>
-              <code style={{ background: 'rgba(217,83,30,0.15)', color: '#D9531E', padding: '1px 6px', borderRadius: 4, fontSize: 10, fontWeight: 700 }}>@modify</code>
-              <span style={{ fontSize: 11, color: '#B33E0E' }}>to change your day plan</span>
-            </div>
+          {/* @modify prompt after first answer */}
+          {showModifyNudge && !thinking && (
+            <>
+              <div style={{ fontSize: 10, color: '#A8A095', marginBottom: 8, textAlign: 'center', letterSpacing: '0.5px' }}>
+                Now try modifying your plan:
+              </div>
+              <button
+                onClick={() => send(modifyPrompt)}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '13px 16px', background: '#fff', border: '1.5px solid #D9531E', borderRadius: 14, cursor: 'pointer', textAlign: 'left', marginBottom: 8 }}
+              >
+                <span style={{ background: '#FFE9DD', color: '#D9531E', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 6, flexShrink: 0 }}>
+                  @modify
+                </span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#D9531E' }}>
+                  {goalTitle
+                    ? `make my ${firstTaskName.toLowerCase()} for ${goalTitle} shorter`
+                    : `make my ${firstTaskName.toLowerCase()} shorter`
+                  }
+                </span>
+              </button>
+            </>
           )}
 
           {/* @ command dropdown */}
